@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-    <head>
-        <title>Spring Security Example</title>
-    </head>
-    <body>
-        <h1>Welcome!</h1>
+  <head>
+    <title>Spring Security Example</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"></link>
+  </head>
+  <body>
+    <div class="container">
+      <div class="jumbotron">
+        <h1>Home page</h1>
+        <p><a th:href="@{/hello}" class="btn btn-primary btn-lg">База учеников</a></p>
+      </div>
+    </div>
 
-        <p>Click <a th:href="@{/hello}">here</a> to see a greeting.</p>
-    </body>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+    <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
+  </body>
 </html>

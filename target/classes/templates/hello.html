@@ -3,11 +3,147 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
     <head>
         <title>Hello World!</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"></link>
+        <style>
+          .first_section {
+            margin-top: 20px;
+          }
+          table .cell {
+            cursor: pointer;
+          }
+          .messages .alert {
+            display: none;
+          }
+        </style>
     </head>
     <body>
-        <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Sign Out"/>
-        </form>
+        <div class="container messages">
+          <div class="alert alert-danger">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+            <strong>Error!</strong> Something went wrong.
+        </div>
+          <div class="alert alert-success">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+            <strong>Success!</strong> Successfully added a row to the database.
+          </div>
+        </div>
+
+        <div class="first_section container">
+          <form role="form" id="addStudent">
+            <div class="form-group">
+              <label for="name">
+                Name
+              <input type="text" id="au_name" class="form-control"></input>
+              </label>
+              <label for="name">
+                Surname
+              <input type="text" id="au_surname" class="form-control"></input>
+              </label>
+              <label for="Email">
+                Email
+              <input type="email" id="au_email" class="form-control"></input>
+              </label>
+              <input type="submit" class="btn btn-primary" value="Add student"></input>
+            </div>
+          </form>
+        </div>
+        <div class="container">
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Surname</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr>
+                <td class="cell">
+                  John
+                </td>
+                <td class="cell">
+                  Doe
+                </td>
+                <td class="cell">
+                  john@example.com
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <form th:action="@{/logout}" method="post">
+              <input type="submit" class="btn btn-primary" value="Sign Out"></input>
+          </form>
+        </div>
+
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+        <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
+        <script>
+        var school = function(){
+          var table = $(".table");
+
+          var messages = {
+            error: ".alert-danger",
+            success: ".alert-success"
+          }
+
+          function showMessage(msg){
+            $(messages[msg]).show();
+          }
+
+          function addRow(data){
+            var row = "<tr><td>" + data.name + "</td>" + "<td>" + data.surname + "</td>" + "<td>" + data.email + "</td></tr>";
+            table.append(row);
+            showMessage("success");
+          }
+
+          var ajaxActions = {
+            add: function(data, ajaxContext){
+          //       possibility of change ajax's context
+              var context = ajaxContext || {
+                method: "POST",
+                url: "/api/add/",
+                data: data,
+                success: function(msg){
+                  if(msg.success){
+                    addRow(data);
+                  }
+                }
+              };
+              $.ajax(context)
+            },
+            remove: function(data, ajaxContext){
+          //       possibility of change ajax's context
+              var context = ajaxContext || {
+                method: "POST",
+                url: "/api/remove/",
+                data: data,
+                success: function(msg){
+
+                }
+              };
+              $.ajax(context)
+            }
+          }
+
+          //   action should be "add" or "remove"
+          function doAjaxQuery(action, data){
+            ajaxActions[action](data);
+          }
+
+          $("#addStudent").submit(function(e){
+            e.preventDefault();
+            var obj = {};
+            obj.name = $("#au_name").val();
+            obj.surname = $("#au_surname").val();
+            obj.email = $("#au_email").val();
+            doAjaxQuery("add", obj);
+            $("#au_name").val("");
+            $("#au_surname").val("");
+            $("#au_email").val("");
+          });
+          }
+
+          school();
+        </script>
     </body>
 </html>
